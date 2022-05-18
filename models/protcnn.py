@@ -5,8 +5,7 @@ import numpy as np
 
 
 from keras import backend as K
-from keras import objectives, losses
-from keras.optimizers import Adam
+from keras import losses
 from keras.callbacks import TensorBoard, Callback
 from keras.models import Model
 from keras.layers import Input, Lambda
@@ -71,7 +70,7 @@ class BaseProtVAE:
         self.VAE = Model(inputs=vae_inp, outputs=decoded)
 
         def xent_loss(x, x_d_m):
-            return K.sum(objectives.categorical_crossentropy(x, x_d_m), -1)
+            return K.sum(losses.categorical_crossentropy(x, x_d_m), -1)
 
         def kl_loss(x, x_d_m):
             return - 0.5 * K.sum(1 + K.log(z_var + 1e-8) - K.square(z_mean) - z_var, axis=-1)
@@ -82,8 +81,11 @@ class BaseProtVAE:
         log_metrics = metrics + [xent_loss, kl_loss, vae_loss]
 
         print('Learning rate ', lr)
-        self.VAE.compile(loss=vae_loss, optimizer=Adam(lr=lr, clipnorm=clipnorm, clipvalue=clipvalue),
+        self.VAE.compile(loss=vae_loss, optimizer="adam",
                          metrics=log_metrics)
+        # self.VAE.compile(loss=vae_loss, optimizer=Adam(lr=lr, clipnorm=clipnorm, clipvalue=clipvalue),
+        #                  metrics=log_metrics)
+        
         self.metric_names = metric_names = ['loss'] + [m.__name__ if type(m)!=str else m for m in self.VAE.metrics ]
         print('Protein VAE initialized !')
 
