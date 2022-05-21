@@ -1,3 +1,14 @@
+# MSA-VAE : Simple refactor to TF2
+
+Since the original repository only supports TF1.0 which is outdated and not compatible with other libraries in TF ecosystem, this repo minimally refactors the code of MSA-VAE to TF2.0
+
+Note that since AR-VAE is reported to have inferior performance, we have not refactor it. Also, the `n_conditions` functionality used in MSA-VAE has not been used in the training and generating scripts, this refactor simply ignore it.
+
+See `msavae_example.ipynb` for an example of how to run.
+
+Below is the original readme.md by alexhh, the original author.
+
+-----
 ## Generating novel protein variants with variational autoencoders
 
 This code provides implementations of variational autoencoder models designed to work with aligned and unaligned protein sequence data as described in the manuscript *Generating novel protein variants with variational autoencoders*.
